@@ -1,0 +1,127 @@
+#define rf1 2
+#define rf2 3
+#define rf3 4
+#define rf4 5
+int m1=10;
+int m2=11;
+int m3=12;
+int m4=13;
+int md=0;
+const int pingPin = A5; // Trigger Pin of Ultrasonic Sensor
+const int echoPin = A4; // Echo Pin of Ultrasonic Sensor
+long duration;
+int distance;
+void setup() {
+Serial.begin(9600);
+pinMode(pingPin,OUTPUT);
+pinMode(echoPin,INPUT);
+pinMode(rf1,INPUT_PULLUP);
+pinMode(rf2,INPUT_PULLUP);
+pinMode(rf3,INPUT_PULLUP);
+pinMode(rf4,INPUT_PULLUP);
+pinMode(m1,OUTPUT);
+pinMode(m2,OUTPUT);
+pinMode(m3,OUTPUT);
+pinMode(m4,OUTPUT);
+digitalWrite(m1,0);
+digitalWrite(m2,0);
+digitalWrite(m3,0);
+digitalWrite(m4,0);
+}
+void loop() {
+digitalWrite(pingPin, LOW);
+delayMicroseconds(2);
+digitalWrite(pingPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(pingPin, LOW);
+duration = pulseIn(echoPin, HIGH);
+distance=duration*0.034/2;
+Serial.println(distance);
+if(digitalRead(rf1)==0 && digitalRead(rf2)==0)
+{
+ md=0;
+ Serial.println("MODE 0");
+}
+ if(md==0)
+{
+ if(digitalRead(rf1)==0)
+{
+digitalWrite(m1,1);
+digitalWrite(m2,0);
+digitalWrite(m3,1);
+digitalWrite(m4,0);
+}
+else if(digitalRead(rf2)==0)
+{
+digitalWrite(m1,0);
+digitalWrite(m2,1);
+digitalWrite(m3,0);
+digitalWrite(m4,1);
+}
+else if(digitalRead(rf3)==0)
+{
+digitalWrite(m1,1);
+digitalWrite(m2,0);
+digitalWrite(m3,0);
+digitalWrite(m4,1);
+}
+else if(digitalRead(rf4)==0)
+{
+digitalWrite(m1,0);
+digitalWrite(m2,1);
+digitalWrite(m3,1);
+digitalWrite(m4,0);
+}
+else
+{
+digitalWrite(m1,0);
+digitalWrite(m2,0);
+digitalWrite(m3,0);
+digitalWrite(m4,0);
+}
+}
+if(digitalRead(rf3)==0 && digitalRead(rf4)==0)
+{
+ md=1;
+ Serial.println("MODE 1");
+ }
+ if(md==1)
+ {
+ if(distance<30)
+ {
+ digitalWrite(m1,1);
+ digitalWrite(m2,0);
+ digitalWrite(m3,0);
+ digitalWrite(m4,1);
+ }
+ else
+ {
+ digitalWrite(m1,1);
+ digitalWrite(m2,0);
+ digitalWrite(m3,1);
+ digitalWrite(m4,0);
+ }
+ }
+if(digitalRead(rf1)==0 && digitalRead(rf3)==0)
+{
+ md=2;
+ Serial.println("MODE 2");
+ }
+ if(md==2)
+ {
+ if(distance<30)
+ {
+ digitalWrite(m1,1);
+ digitalWrite(m2,0);
+ digitalWrite(m3,1);
+ digitalWrite(m4,0);
+ }
+ else
+ {
+ digitalWrite(m1,0);
+ digitalWrite(m2,0);
+ digitalWrite(m3,0);
+ digitalWrite(m4,0);
+ }
+ }
+ }
